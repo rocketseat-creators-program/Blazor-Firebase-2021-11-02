@@ -1,25 +1,27 @@
 ﻿@page "/login"
+@using System.ComponentModel.DataAnnotations
+@inject AuthenticationStateProvider authProvider
+@inject IJSRuntime jsRuntime
 
 <div class="container-fluid border">
     <div class="row">
-        <div class="col-sm col-md px-md-3 py-md-3">
-            
+        <div class="col-sm col-md px-md-3 py-md-3">            
             <div class="form-group">
                 <label for="InputEmail">Email</label>
-                <input type="email" class="form-control" id="InputEmail" aria-describedby="emailHelp" placeholder="Email">
+                <input @bind-value="model.Username" type="email" class="form-control" id="InputEmail" aria-describedby="emailHelp" placeholder="Email">
             </div>
             <div class="form-group">
                 <label for="InputPassword">Senha</label>
-                <input type="password" class="form-control" id="InputPassword" placeholder="Senha">
+                <input @bind-value="model.Password" type="password" class="form-control" id="InputPassword" placeholder="Senha">
             </div>
-            <a class="btn btn-primary text-light">Entrar</a>
+            <a @onclick="LogInCredentials" class="btn btn-primary text-light">Entrar</a>
 
             <a class="btn btn-secondary" href="cadastro">Cadastrar</a>
         </div>
         <div class="col-sm9 col-md border-left px-md-3 py-md-3">
             <div class="row">
                 <div class="col-md-12 my-md-3"> 
-                    <a class="btn btn-lg btn-google btn-block border">
+                    <a @onclick="LogInGoogle" class="btn btn-lg btn-google btn-block border">
                         <img src="https://img.icons8.com/color/16/000000/google-logo.png"> 
                         Entrar com o Google
                     </a> 
@@ -28,3 +30,37 @@
         </div>                
     </div>
 </div>
+@code
+{
+    public class LoginModel
+    {
+        [Required]
+        public string Username { get; set; }
+        [Required]
+        public string Password { get; set; }
+    }
+    private LoginModel model = new LoginModel();
+
+    private Task<IJSObjectReference> _internalModule;
+    private Task<IJSObjectReference> Module => _internalModule ??= jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/Authentication.js").AsTask();
+
+
+    private async Task LogInCredentials()
+    {
+        var module = await Module;
+        var token = await module.InvokeAsync<string>("LoginCredentials", model.Username, model.Password);
+        if (!string.IsNullOrEmpty(token))
+        {            
+            await((CustomAuthenticationStateProvider)authProvider).MarkUserAsAuthenticated(token);
+        }
+    }
+    private async Task LogInGoogle()
+    {
+        var module = await Module;
+        var token = await module.InvokeAsync<string>("LoginGoogle");
+        if (!string.IsNullOrEmpty(token))
+        {
+            await ((CustomAuthenticationStateProvider)authProvider).MarkUserAsAuthenticated(token);
+        }
+    }
+}

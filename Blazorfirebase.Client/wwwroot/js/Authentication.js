@@ -68,13 +68,13 @@ function sleep(ms) {
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 var firebaseConfig = {
-    apiKey: "API",
-    authDomain: "Domain",
-    projectId: "ProjectID",
-    storageBucket: "Storage",
-    messagingSenderId: "SenderId",
-    appId: "AppId",
-    measurementId: "MeasurementId"
+  apiKey: "AIzaSyANF8GvxOEVuBhfAJiQDm8edrXcVnQCDyw",
+  authDomain: "serieshandbook.firebaseapp.com",
+  projectId: "serieshandbook",
+  storageBucket: "serieshandbook.appspot.com",
+  messagingSenderId: "141271687780",
+  appId: "1:141271687780:web:17cfa2dade59bb3a607571",
+  measurementId: "G-FKMPEJW819"
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
