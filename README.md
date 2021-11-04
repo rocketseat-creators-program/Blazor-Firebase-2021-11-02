@@ -9,5 +9,5 @@ Neste projeto vamos implementar esse serviço em um programa na linguagem C#
 
 ## Expert
 
-| :-: |
+
 |[Lucas Tadeu Inaba Cofani](https://github.com/lucascofani)|
